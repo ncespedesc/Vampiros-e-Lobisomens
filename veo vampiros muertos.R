@@ -7,20 +7,21 @@
 
 # Carregando pacotes ----
 library(deSolve)
-library(ggplot2)
+library(tidyverse)
+library(reshape2)
 
 # Parametros ----
 
 # Taxas por ano 
 
-natalidade <- 0.8 #taxa matalidade mundial 2015
-Motalidade.Hum <- 0.6 #taxa de mortalidade
-beta.vamp <- .5 #taxa de infecao vampiros
-beta.lobi <- .4 #taxa de infecao lobisomn
-prev.vamp <- 0.2 # taxa de prevencao que um humano vire vamp porque se suicida ou le disparam 
-prev.lobi <- 0.2 #taxa de prevencao que um humano vire lobi porque se suicida ou le disparam 
-gamma.vamp  <- 1 # periodo de latencia para virar vampiro 
-gamma.lobi <- 1 # periodo de latencia lobi
+natalidade <- 0.2 #taxa matalidade mundial 2015
+Motalidade.Hum <- 0.2 #taxa de mortalidade
+beta.vamp <- 0.001 #taxa de infecao vampiros
+beta.lobi <-  0 #taxa de infecao lobisomn
+prev.vamp <- 0 # taxa de prevencao que um humano vire vamp porque se suicida ou le disparam 
+prev.lobi <- 0 #taxa de prevencao que um humano vire lobi porque se suicida ou le disparam 
+gamma.vamp  <- 365/21 # periodo de latencia para virar vampiro 3 sem
+gamma.lobi <- 0 #365/21 # periodo de latencia lobi 3 sem 
 letha.h.v <- 0 # taxa de humonaos que matam vampiros 
 letha.w.v <- 0 #taxa de lobi que matam vampiros 
 letha.h.w <- 0 # taxa de humonaos que matam lobi
@@ -82,14 +83,16 @@ SIRS <- function(t,state,parameters){
     # dr <- gama*i - mu*r - omegaR*r
     
     ds <- natalidade*S - Motalidade.Hum*S - beta.vamp *S*V -beta.lobi*S*W
+    
     dIv <- beta.vamp*S*V - prev.vamp* Iv - gamma.vamp*Iv
-    dIw <- beta.lobi*S*W - prev.lobi*Iw - gamma.lobi*Iw
     dV <- gamma.vamp*Iv - letha.h.v*V - letha.w.v*V
+    
+    dIw <- beta.lobi*S*W - prev.lobi*Iw - gamma.lobi*Iw
     dW <- gamma.lobi*Iw - letha.h.w*W - letha.v.w*W - mortalidade.lobi*W 
     
     
     # return the output of the model
-    return(list(c(ds, dIv, dIw,dV, dW)))
+    return(list(c(ds, dIv, dIw, dV, dW)))
     
   })
 }
@@ -101,6 +104,13 @@ modSIRS <- ode(y = state.SVW, times = tempos, func = SIRS, parms = par.SVW, meth
 
 
 modSIRS <- as.data.frame(modSIRS)
+
+modSIRS %>%
+  gather(key = 'compartimento', value = 'valor', -time)%>%
+  ggplot(aes(x= time, y = valor))+
+  geom_line()+
+  facet_wrap('compartimento', scales = 'free')
+
 
 plot(modSIRS$time, modSIRS$Iv)
 
