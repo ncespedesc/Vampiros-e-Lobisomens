@@ -14,19 +14,19 @@ library(reshape2)
 
 # Taxas por ano 
 
-natalidade <- 0.000001 #taxa matalidade mundial 2015
+natalidade <- 0.001 #taxa matalidade mundial 2015
 Motalidade.Hum <- 0.0001 #taxa de mortalidade
-beta.vamp <- 0.001 #taxa de infecao vampiros
-beta.lobi <- 0.001 #taxa de infecao lobisomn
-prev.vamp <- 0.0001 # taxa de prevencao que um humano vire vamp porque se suicida ou le disparam 
-prev.lobi <- 0.0001 #taxa de prevencao que um humano vire lobi porque se suicida ou le disparam 
+beta.vamp <- 0.01 #taxa de infecao vampiros
+beta.lobi <- 0.01 #taxa de infecao lobisomn
+prev.vamp <- 0.001 # taxa de prevencao que um humano vire vamp porque se suicida ou le disparam 
+prev.lobi <- 0.001 #taxa de prevencao que um humano vire lobi porque se suicida ou le disparam 
 # gamma.vamp  <- 0#365/21 # periodo de latencia para virar vampiro 3 sem
 # gamma.lobi <- 0 #365/21 # periodo de latencia lobi 3 sem 
 letha.homen.mata.vampiro <- 0.1 # taxa de humonaos que matam vampiros 
 letha.lobi.mata.vampiro <- 0.5 #taxa de lobi que matam vampiros 
 letha.homenm.mata.lobi <- 0.5 # taxa de humonaos que matam lobi
 letha.vampi.mata.lobi <- 0 # taxa de vampiro que matam lobi
-mortalidade.lobi <- 0.1 # taxa de morte natural dos lobi
+mortalidade.lobi <- 0 # taxa de morte natural dos lobi
 
 # o desolve precisa um conjunto de parametrros pra souber o nome da equacao 
 
@@ -57,7 +57,7 @@ S  <- 1000
 Iv <- 0
 Iw <- 0
 V <- 2
-W <- 1
+W <- 2
 
 
 
@@ -68,7 +68,7 @@ state.SVW <- c(S = S, Iv = Iv,Iw = Iw)
 
 
 # Tempo de simulacao ----
-# Varie o tempo de simulacao: 20, 100
+
 tsim <- 1000
 Dt <- 1
 
