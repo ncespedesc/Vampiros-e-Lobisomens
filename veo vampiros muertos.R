@@ -14,18 +14,18 @@ library(reshape2)
 
 # Taxas por ano 
 
-natalidade <- 0.2 #taxa matalidade mundial 2015
-Motalidade.Hum <- 0.2 #taxa de mortalidade
-beta.vamp <- 0.001 #taxa de infecao vampiros
-beta.lobi <-  0 #taxa de infecao lobisomn
+natalidade <- 0 #taxa matalidade mundial 2015
+Motalidade.Hum <- 0 #taxa de mortalidade
+beta.vamp <- 0.00001 #taxa de infecao vampiros
+beta.lobi <-  0.1 #taxa de infecao lobisomn
 prev.vamp <- 0 # taxa de prevencao que um humano vire vamp porque se suicida ou le disparam 
 prev.lobi <- 0 #taxa de prevencao que um humano vire lobi porque se suicida ou le disparam 
-gamma.vamp  <- 365/21 # periodo de latencia para virar vampiro 3 sem
+gamma.vamp  <- 0#365/21 # periodo de latencia para virar vampiro 3 sem
 gamma.lobi <- 0 #365/21 # periodo de latencia lobi 3 sem 
-letha.h.v <- 0 # taxa de humonaos que matam vampiros 
-letha.w.v <- 0 #taxa de lobi que matam vampiros 
-letha.h.w <- 0 # taxa de humonaos que matam lobi
-letha.v.w <- 0 # taxa de vampiro que matam lobi
+letha.homen.mata.vampiro <- 0 # taxa de humonaos que matam vampiros 
+letha.lobi.mata.vampiro <- 0 #taxa de lobi que matam vampiros 
+letha.homenm.mata.lobi <- 0 # taxa de humonaos que matam lobi
+letha.vampi.mata.lobi <- 0 # taxa de vampiro que matam lobi
 mortalidade.lobi <- 0 # taxa de morte natural dos lobi
 
 # o desolve precisa um conjunto de parametrros pra souber o nome da equacao 
@@ -39,10 +39,14 @@ par.SVW <- c(
   prev.lobi = prev.lobi,
   gamma.vamp =  gamma.vamp,
   gamma.lobi = gamma.lobi,
-  letha.h.v = letha.h.v,
-  letha.w.v = letha.w.v,
-  letha.h.w = letha.h.w,
-  letha.v.w = letha.v.w,
+  
+  # gamma.vamp =  gamma.lobi,
+  # gamma.lobi = gamma.vamp,
+  
+  letha.homen.mata.vampiro = letha.homen.mata.vampiro,
+  letha.lobi.mata.vampiro = letha.lobi.mata.vampiro,
+  letha.homenm.mata.lobi = letha.homenm.mata.lobi,
+  letha.vampi.mata.lobi = letha.vampi.mata.lobi,
   mortalidade.lobi = mortalidade.lobi
 )
 
@@ -53,18 +57,18 @@ R0
 
 # Variaveis e condicao inicial ----
 
-S  <- 1000
-Iv <- 0
-Iw <- 0
-W <- 0
-V <- 1
+# S  <- 0.9998
+# Iv <- 0
+# Iw <- 0
+# W <- 0.0001
+# V <- 0.0001
 
 
 # state.SIR <- c(s=0.9999,i=0.0001,r=0)
 
-state.SVW <- c(S = S, Iv = Iv,Iw = Iw, W = W, V = V)
+# state.SVW <- c(S = S, Iv = Iv,Iw = Iw, W = W, V = V)
 
-
+state.SVW <- c(S = 1000, Iv = 0,Iw = 0, W = 1, V = 1)
 
 
 # Tempo de simulacao ----
@@ -85,14 +89,14 @@ SIRS <- function(t,state,parameters){
     ds <- natalidade*S - Motalidade.Hum*S - beta.vamp *S*V -beta.lobi*S*W
     
     dIv <- beta.vamp*S*V - prev.vamp* Iv - gamma.vamp*Iv
-    dV <- gamma.vamp*Iv - letha.h.v*V - letha.w.v*V
+    dV <- gamma.vamp*Iv - letha.homen.mata.vampiro*V - letha.lobi.mata.vampiro*V
     
     dIw <- beta.lobi*S*W - prev.lobi*Iw - gamma.lobi*Iw
-    dW <- gamma.lobi*Iw - letha.h.w*W - letha.v.w*W - mortalidade.lobi*W 
+    dW <- gamma.lobi*Iw - letha.homenm.mata.lobi*W - letha.vampi.mata.lobi*W - mortalidade.lobi*W 
     
     
     # return the output of the model
-    return(list(c(ds, dIv, dIw, dV, dW)))
+    return(list(c(ds, dIv, dV, dIw,  dW)))
     
   })
 }
