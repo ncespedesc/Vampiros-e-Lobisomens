@@ -17,7 +17,7 @@ library(reshape2)
 natalidade <- 0 #taxa matalidade mundial 2015
 Motalidade.Hum <- 0 #taxa de mortalidade
 beta.vamp <- 0.00001 #taxa de infecao vampiros
-beta.lobi <-  0.1 #taxa de infecao lobisomn
+beta.lobi <-  0.00001 #taxa de infecao lobisomn
 prev.vamp <- 0 # taxa de prevencao que um humano vire vamp porque se suicida ou le disparam 
 prev.lobi <- 0 #taxa de prevencao que um humano vire lobi porque se suicida ou le disparam 
 gamma.vamp  <- 0#365/21 # periodo de latencia para virar vampiro 3 sem
@@ -57,18 +57,17 @@ R0
 
 # Variaveis e condicao inicial ----
 
-# S  <- 0.9998
-# Iv <- 0
-# Iw <- 0
-# W <- 0.0001
-# V <- 0.0001
+S  <- 1000
+ Iv <- 0
+ Iw <- 0
+ W <- 0
+ V <- 0
 
 
 # state.SIR <- c(s=0.9999,i=0.0001,r=0)
 
-# state.SVW <- c(S = S, Iv = Iv,Iw = Iw, W = W, V = V)
+ state.SVW <- c(S = S, Iv = Iv,Iw = Iw, W = W, V = V)
 
-state.SVW <- c(S = 1000, Iv = 0,Iw = 0, W = 1, V = 1)
 
 
 # Tempo de simulacao ----
@@ -113,7 +112,7 @@ modSIRS %>%
   gather(key = 'compartimento', value = 'valor', -time)%>%
   ggplot(aes(x= time, y = valor))+
   geom_line()+
-  facet_wrap('compartimento', scales = 'free')
+  facet_wrap('compartimento', scales = 'fixed')
 
 
 plot(modSIRS$time, modSIRS$Iv)
