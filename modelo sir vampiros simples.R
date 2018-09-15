@@ -26,7 +26,7 @@ letha.homen.mata.vampiro <- 0.1 # taxa de humonaos que matam vampiros
 letha.lobi.mata.vampiro <- 0.5 #taxa de lobi que matam vampiros 
 letha.homenm.mata.lobi <- 0.5 # taxa de humonaos que matam lobi
 letha.vampi.mata.lobi <- 0 # taxa de vampiro que matam lobi
-mortalidade.lobi <- 0 # taxa de morte natural dos lobi
+mortalidade.lobi <- 0.1 # taxa de morte natural dos lobi
 
 # o desolve precisa um conjunto de parametrros pra souber o nome da equacao 
 
@@ -39,17 +39,17 @@ par.SVW <- c(
   prev.lobi = prev.lobi, 
   # gamma.vamp =  gamma.vamp,
   # gamma.lobi = gamma.lobi,
-   letha.homen.mata.vampiro = letha.homen.mata.vampiro,
+  letha.homen.mata.vampiro = letha.homen.mata.vampiro,
   letha.lobi.mata.vampiro = letha.lobi.mata.vampiro,
-   letha.homenm.mata.lobi = letha.homenm.mata.lobi,
-  letha.vampi.mata.lobi = letha.vampi.mata.lobi
-  # mortalidade.lobi = mortalidade.lobi
+  letha.homenm.mata.lobi = letha.homenm.mata.lobi,
+  letha.vampi.mata.lobi = letha.vampi.mata.lobi,
+  mortalidade.lobi = mortalidade.lobi
 )
 
 # Calculando R0 ----
 #
-R0 <- beta.vamp/(gamma.vamp)
-R0 
+# R0 <- beta.vamp/(gamma.vamp)
+# R0 
 
 # Variaveis e condicao inicial ----
 
@@ -78,18 +78,13 @@ SIRS <- function(t,state,parameters){
   with(as.list(c(state,parameters)),{
     
     # # rate of change
-    # ds <- mu - beta*s*i - mu*s + + omegaR*r
-    # di <- beta*s*i - (mu+gama)*i
-    # dr <- gama*i - mu*r - omegaR*r
     
     ds <- natalidade*S - Motalidade.Hum*S - beta.vamp *S*V -beta.lobi*S*W
     
     dIv <- beta.vamp*S*V - prev.vamp* Iv - letha.lobi.mata.vampiro*V - letha.homen.mata.vampiro*V 
-    # dV <- gamma.vamp*Iv - letha.homen.mata.vampiro*V - letha.lobi.mata.vampiro*V
     
-    dIw <- beta.lobi*S*W - prev.lobi*Iw - letha.vampi.mata.lobi*W - letha.homenm.mata.lobi*W 
-    # dW <- gamma.lobi*Iw - letha.homenm.mata.lobi*W - letha.vampi.mata.lobi*W - mortalidade.lobi*W 
     
+    dIw <- beta.lobi*S*W - prev.lobi*Iw - letha.vampi.mata.lobi*W - letha.homenm.mata.lobi*W - mortalidade.lobi*W 
     
     # return the output of the model
     return(list(c(ds, dIv, dIw)))
@@ -105,8 +100,21 @@ modSIRS <- ode(y = state.SVW, times = tempos, func = SIRS, parms = par.SVW, meth
 
 modSIRS <- as.data.frame(modSIRS)
 
+# modSIRS %>%
+#   gather(key = 'compartimento', value = 'valor', -time)%>%
+#   ggplot(aes(x= time, y = valor))+
+#   geom_line()+
+#   facet_wrap('compartimento', scales = 'fixed')
+
+
+
+
 modSIRS %>%
-  gather(key = 'compartimento', value = 'valor', -time)%>%
-  ggplot(aes(x= time, y = valor))+
-  geom_line()+
-  facet_wrap('compartimento', scales = 'fixed')
+  gather(key = 'compartimento', value = 'valor', -time)  %>% 
+  ggplot( )+
+  geom_line(aes(x= time, y = valor, colour= compartimento))
+
+
+
+
+
