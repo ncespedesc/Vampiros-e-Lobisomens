@@ -14,12 +14,12 @@ library(reshape2)
 
 # Taxas por ano 
 
-natalidade <- 0 #taxa matalidade mundial 2015
-Motalidade.Hum <- 0 #taxa de mortalidade
-beta.vamp <- 0.00001 #taxa de infecao vampiros
-beta.lobi <-  0.00001 #taxa de infecao lobisomn
-prev.vamp <- 0 # taxa de prevencao que um humano vire vamp porque se suicida ou le disparam 
-prev.lobi <- 0 #taxa de prevencao que um humano vire lobi porque se suicida ou le disparam 
+natalidade <- 0.000001 #taxa matalidade 
+Motalidade.Hum <- 0.0001 #taxa de mortalidade
+beta.vamp <- 0.001 #taxa de infecao vampiros
+beta.lobi <- 0.001 #taxa de infecao lobisomn
+prev.vamp <- 0.0001 # taxa de prevencao que um humano vire vamp porque se suicida ou le disparam 
+prev.lobi <- 0.0001 #taxa de prevencao que um humano vire lobi porque se suicida ou le disparam 
 gamma.vamp  <- 0#365/21 # periodo de latencia para virar vampiro 3 sem
 gamma.lobi <- 0 #365/21 # periodo de latencia lobi 3 sem 
 letha.homen.mata.vampiro <- 0 # taxa de humonaos que matam vampiros 
@@ -87,10 +87,10 @@ SIRS <- function(t,state,parameters){
     
     ds <- natalidade*S - Motalidade.Hum*S - beta.vamp *S*V -beta.lobi*S*W
     
-    dIv <- beta.vamp*S*V - prev.vamp* Iv - gamma.vamp*Iv
+    dIv <- beta.vamp*S*V - prev.vamp* Iv + gamma.vamp*Iv
     dV <- gamma.vamp*Iv - letha.homen.mata.vampiro*V - letha.lobi.mata.vampiro*V
     
-    dIw <- beta.lobi*S*W - prev.lobi*Iw - gamma.lobi*Iw
+    dIw <- beta.lobi*S*W - prev.lobi*Iw + gamma.lobi*Iw
     dW <- gamma.lobi*Iw - letha.homenm.mata.lobi*W - letha.vampi.mata.lobi*W - mortalidade.lobi*W 
     
     
