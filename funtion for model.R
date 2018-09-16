@@ -1,9 +1,8 @@
-
-
 ###################################################################################
 #                    modelagem matematica lobisomem vampiro humanos               #
 ##################################################################################
 
+# Parametros ----
 
 natalidade <- 0.001 #taxa matalidade mundial 2015
 Motalidade.Hum <- 0.0001 #taxa de mortalidade
@@ -19,6 +18,9 @@ letha.homenm.mata.lobi <- 0.1 # taxa de humonaos que matam lobi
 letha.vampi.mata.lobi <- 0.1 # taxa de vampiro que matam lobi
 mortalidade.lobi <- 0.1
 
+#funtion form model ----
+
+#paramoteros do modelo (correr funcao primeiro )
 
 HVW.model(natalidade ,
           Motalidade.Hum ,
@@ -35,7 +37,7 @@ HVW.model(natalidade ,
           mortalidade.lobi )
 
 
-
+# funtion para o modelo ----
 
 HVW.model  <- function(natalidade = natalidade,
                        Motalidade.Hum = Motalidade.Hum,
@@ -61,11 +63,7 @@ HVW.model  <- function(natalidade = natalidade,
   if(!(require(ggthemes))){install.packages("ggthemes")}; library(ggthemes)
 
 
-# Parametros ----
 
-# Taxas por ano 
-
- # taxa de morte natural dos lobi
 
 # o desolve precisa um conjunto de parametrros pra souber o nome da equacao 
 
@@ -140,13 +138,6 @@ modSIRS <- ode(y = state.SVW, times = tempos, func = SIRS, parms = par.SVW, meth
 modSIRS <- as.data.frame(modSIRS)
 names(modSIRS) <- c("Time", "Humans", "Vampires", "Wolfman")
 
-# modSIRS %>%
-#   gather(key = 'compartimento', value = 'valor', -time)%>%
-#   ggplot(aes(x= time, y = valor))+
-#   geom_line()+
-#   facet_wrap('compartimento', scales = 'fixed')
-
-
 
 
 plot.vamp.lobi.hum <- modSIRS %>%
@@ -156,7 +147,7 @@ plot.vamp.lobi.hum <- modSIRS %>%
                         ylim(0,1000)+
                         # scale_fill_manual(values=c("#999999", "#E69F00", "#56B4E9"))
                         # ggthemes::theme_igray()+
-                        xlab("Population ")+ ylab("Time (years)")+
+                        xlab("Population ")+ ylab("Time (years)")+ ggtitle("Interration of Populations")+
                         theme(axis.text.x = element_text(angle = 45, hjust = 1) ,text = element_text(size = 17, face = "bold") )
                       
                       
