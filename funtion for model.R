@@ -1,18 +1,9 @@
+
+
 ###################################################################################
 #                    modelagem matematica lobisomem vampiro humanos               #
-###################################################################################
+##################################################################################
 
-
-# Formulacao com fracoes (proporcoes) 
-
-# Carregando pacotes ----
-library(deSolve)
-library(tidyverse)
-library(reshape2)
-
-# Parametros ----
-
-# Taxas por ano 
 
 natalidade <- 0.001 #taxa matalidade mundial 2015
 Motalidade.Hum <- 0.0001 #taxa de mortalidade
@@ -26,7 +17,55 @@ letha.homen.mata.vampiro <- 0.1 # taxa de humonaos que matam vampiros
 letha.lobi.mata.vampiro <- 0.1 #taxa de lobi que matam vampiros 
 letha.homenm.mata.lobi <- 0.1 # taxa de humonaos que matam lobi
 letha.vampi.mata.lobi <- 0.1 # taxa de vampiro que matam lobi
-mortalidade.lobi <- 0.1 # taxa de morte natural dos lobi
+mortalidade.lobi <- 0.1
+
+
+HVW.model(natalidade ,
+          Motalidade.Hum ,
+          beta.vamp ,
+          beta.lobi ,
+          prev.vamp ,
+          prev.lobi , 
+          # gamma.vamp =  gamma.vamp,
+          # gamma.lobi = gamma.lobi,
+          letha.homen.mata.vampiro ,
+          letha.lobi.mata.vampiro ,
+          letha.homenm.mata.lobi ,
+          letha.vampi.mata.lobi ,
+          mortalidade.lobi )
+
+
+
+
+HVW.model  <- function(natalidade = natalidade,
+                       Motalidade.Hum = Motalidade.Hum,
+                       beta.vamp = beta.vamp,
+                       beta.lobi = beta.lobi,
+                       prev.vamp = prev.vamp,
+                       prev.lobi = prev.lobi, 
+                       # gamma.vamp =  gamma.vamp,
+                       # gamma.lobi = gamma.lobi,
+                       letha.homen.mata.vampiro = letha.homen.mata.vampiro,
+                       letha.lobi.mata.vampiro = letha.lobi.mata.vampiro,
+                       letha.homenm.mata.lobi = letha.homenm.mata.lobi,
+                       letha.vampi.mata.lobi = letha.vampi.mata.lobi,
+                       mortalidade.lobi = mortalidade.lobi) {
+
+# Formulacao com fracoes (proporcoes) 
+
+# Carregando pacotes ----
+  
+  if(!(require(deSolve))){install.packages("deSolve")}; library(deSolve)
+  if(!(require(tidyverse))){install.packages("tidyverse")}; library(tidyverse)
+  if(!(require(reshape2))){install.packages("reshape2")}; library(reshape2)
+  if(!(require(ggthemes))){install.packages("ggthemes")}; library(ggthemes)
+
+
+# Parametros ----
+
+# Taxas por ano 
+
+ # taxa de morte natural dos lobi
 
 # o desolve precisa um conjunto de parametrros pra souber o nome da equacao 
 
@@ -99,6 +138,7 @@ modSIRS <- ode(y = state.SVW, times = tempos, func = SIRS, parms = par.SVW, meth
 
 
 modSIRS <- as.data.frame(modSIRS)
+names(modSIRS) <- c("Time", "Humans", "Vampires", "Wolfman")
 
 # modSIRS %>%
 #   gather(key = 'compartimento', value = 'valor', -time)%>%
@@ -109,12 +149,21 @@ modSIRS <- as.data.frame(modSIRS)
 
 
 
-modSIRS %>%
-  gather(key = 'compartimento', value = 'valor', -time)  %>% 
-  ggplot( )+
-  geom_line(aes(x= time, y = valor, colour= compartimento))+ylim(0,1000)
+plot.vamp.lobi.hum <- modSIRS %>%
+                        gather(key = 'Population', value = 'valor', -Time)  %>% 
+                        ggplot( )+
+                        geom_line(aes(x= Time, y = valor, colour = Population), size = 1)+
+                        ylim(0,1000)+
+                        # scale_fill_manual(values=c("#999999", "#E69F00", "#56B4E9"))
+                        # ggthemes::theme_igray()+
+                        xlab("Population ")+ ylab("Time (years)")+
+                        theme(axis.text.x = element_text(angle = 45, hjust = 1) ,text = element_text(size = 17, face = "bold") )
+                      
+                      
 
 
 
+return(plot.vamp.lobi.hum)
 
+}
 
