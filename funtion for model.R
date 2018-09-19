@@ -8,15 +8,15 @@ natalidade <- 0.001 #taxa matalidade mundial 2015
 Motalidade.Hum <- 0.0001 #taxa de mortalidade
 beta.vamp <- 0.005 #taxa de infecao vampiros
 beta.lobi <- 0.001 #taxa de infecao lobisomn
-prev.vamp <- 0.001 # taxa de prevencao que um humano vire vamp porque se suicida ou le disparam 
-prev.lobi <- 0.001 #taxa de prevencao que um humano vire lobi porque se suicida ou le disparam 
+prev.vamp <- 0.001 # taxa de prevencao que um humano vire vamp porque se suicida ou matam com estaca no coração  
+prev.lobi <- 0.001 #taxa de prevencao que um humano vire lobi porque se suicida ou le disparam bala de prata
 # gamma.vamp  <- 0#365/21 # periodo de latencia para virar vampiro 3 sem
 # gamma.lobi <- 0 #365/21 # periodo de latencia lobi 3 sem 
 letha.homen.mata.vampiro <- 0.001 # taxa de humonaos que matam vampiros 
 letha.lobi.mata.vampiro <- 0.2 #taxa de lobi que matam vampiros 
 letha.homenm.mata.lobi <- 0.001 # taxa de humonaos que matam lobi
 letha.vampi.mata.lobi <- 0.01 # taxa de vampiro que matam lobi
-mortalidade.lobi <- 0.1
+mortalidade.lobi <- 0.001 # cinomose ou vivem o mesmo tempo do que os humanos 
 
 
 #lobisomem eh muito masi p-oderoso segindop o alussio 
@@ -99,7 +99,7 @@ HVW.model  <- function(natalidade = natalidade,
   Iw <- 0
   V <- 2
   W <- 2
-  
+  # K <- S/10 # capacidade de suporte ouseja cuantos humanos poderiam matar 
   
   
   # state.SIR <- c(s=0.9999,i=0.0001,r=0)
@@ -110,7 +110,7 @@ HVW.model  <- function(natalidade = natalidade,
   
   # Tempo de simulacao ----
   
-  tsim <- 1000
+  tsim <- 2500
   Dt <- 1
   
   # Funcao para o modelo SIR ----
@@ -120,12 +120,20 @@ HVW.model  <- function(natalidade = natalidade,
       
       # # rate of change
       
-      ds <- natalidade*S - Motalidade.Hum*S - beta.vamp *S*V -beta.lobi*S*W
+      # ds <- natalidade*S - Motalidade.Hum*S - beta.vamp *S*V -beta.lobi*S*W
+      ds <- (natalidade*S) - Motalidade.Hum*S - (beta.vamp *S*V ) - beta.lobi*S*W
       
-      dIv <- beta.vamp*S*V - prev.vamp* Iv - letha.lobi.mata.vampiro*V - letha.homen.mata.vampiro*V 
+      dIv <- (beta.vamp*S*V)- prev.vamp* Iv - letha.lobi.mata.vampiro*V - letha.homen.mata.vampiro*V
+      
+      # dIv <- sqrt((((beta.vamp*S*V)/(S)) - prev.vamp* Iv - letha.lobi.mata.vampiro*V - letha.homen.mata.vampiro*V )^2)
       
       
-      dIw <- beta.lobi*S*W - prev.lobi*Iw - letha.vampi.mata.lobi*W - letha.homenm.mata.lobi*W - mortalidade.lobi*W 
+      
+      dIw <- beta.lobi*S*W - prev.lobi*Iw - letha.vampi.mata.lobi*W - letha.homenm.mata.lobi*W - mortalidade.lobi*W
+      
+      
+      # dIw <- sqrt(((beta.lobi*S*W/(S)) - prev.lobi*Iw - letha.vampi.mata.lobi*W - letha.homenm.mata.lobi*W - mortalidade.lobi*W )^2)
+      
       
       # return the output of the model
       return(list(c(ds, dIv, dIw)))
@@ -151,7 +159,7 @@ HVW.model  <- function(natalidade = natalidade,
     ylim(0,1000)+
     # scale_fill_manual(values=c("#999999", "#E69F00", "#56B4E9"))
     # ggthemes::theme_igray()+
-    xlab("Time (years) ")+ ylab("Population")+ ggtitle("Interration of Populations")+
+    xlab("Time (Days) ")+ ylab("Population")+ ggtitle("Interration of Populations")+
     theme(axis.text.x = element_text(angle = 45, hjust = 1) ,text = element_text(size = 17, face = "bold") )
   
   
@@ -159,5 +167,7 @@ HVW.model  <- function(natalidade = natalidade,
   
   
   return(plot.vamp.lobi.hum)
+
+  
   
 }
