@@ -93,7 +93,7 @@ HVW.model  <- function(natalidade = natalidade,
   # R0 
   
   # Variaveis e condicao inicial ----
-  
+  S.iniciais <- 1000 
   S  <- 1000
   Iv <- 0
   Iw <- 0
@@ -121,7 +121,7 @@ HVW.model  <- function(natalidade = natalidade,
       # # rate of change
       
       # ds <- natalidade*S - Motalidade.Hum*S - beta.vamp *S*V -beta.lobi*S*W
-      ds <- (natalidade*S) - Motalidade.Hum*S - (beta.vamp *S*V ) - beta.lobi*S*W
+      ds <- (natalidade*S) - Motalidade.Hum*S - ((beta.vamp *S*V )*(S/S.iniciais)) -( (beta.lobi*S*W)*(S/S.iniciais))
       
       dIv <- (beta.vamp*S*V)- prev.vamp* Iv - letha.lobi.mata.vampiro*V - letha.homen.mata.vampiro*V
       
@@ -156,7 +156,7 @@ HVW.model  <- function(natalidade = natalidade,
     gather(key = 'Population', value = 'valor', -Time)  %>% 
     ggplot( )+
     geom_line(aes(x= Time, y = valor, colour = Population), size = 1)+
-    ylim(0,1000)+
+    # ylim(0,1000)+
     # scale_fill_manual(values=c("#999999", "#E69F00", "#56B4E9"))
     # ggthemes::theme_igray()+
     xlab("Time (Days) ")+ ylab("Population")+ ggtitle("Interration of Populations")+
@@ -167,7 +167,7 @@ HVW.model  <- function(natalidade = natalidade,
   
   
   return(plot.vamp.lobi.hum)
-
+  
   
   
 }
