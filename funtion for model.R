@@ -170,4 +170,8 @@ HVW.model  <- function(natalidade = natalidade,
   
   
   
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> df54ee150e833471725060bf614fef0e57b48ee4
