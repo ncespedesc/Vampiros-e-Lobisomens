@@ -3,20 +3,27 @@
 ##################################################################################
 
 # Parametros ----
-
+#cenario optimista
 natalidade <- 0.001 #taxa matalidade mundial 2015
 Motalidade.Hum <- 0.0001 #taxa de mortalidade
-beta.vamp <- 0.005 #taxa de infecao vampiros
+beta.vamp <- 0.003 #taxa de infecao vampiros
 beta.lobi <- 0.001 #taxa de infecao lobisomn
 prev.vamp <- 0.001 # taxa de prevencao que um humano vire vamp porque se suicida ou matam com estaca no coração  
 prev.lobi <- 0.001 #taxa de prevencao que um humano vire lobi porque se suicida ou le disparam bala de prata
 # gamma.vamp  <- 0#365/21 # periodo de latencia para virar vampiro 3 sem
 # gamma.lobi <- 0 #365/21 # periodo de latencia lobi 3 sem 
 letha.homen.mata.vampiro <- 0.001 # taxa de humonaos que matam vampiros 
-letha.lobi.mata.vampiro <- 0.2 #taxa de lobi que matam vampiros 
+letha.lobi.mata.vampiro <- 0.5 #taxa de lobi que matam vampiros 
 letha.homenm.mata.lobi <- 0.001 # taxa de humonaos que matam lobi
 letha.vampi.mata.lobi <- 0.01 # taxa de vampiro que matam lobi
 mortalidade.lobi <- 0.001 # cinomose ou vivem o mesmo tempo do que os humanos 
+
+#cenario pesimista
+
+beta.vamp <- 0.004 #taxa de infecao vampiros
+
+
+
 
 
 #lobisomem eh muito masi p-oderoso segindop o alussio 
@@ -97,8 +104,8 @@ HVW.model  <- function(natalidade = natalidade,
   S  <- 1000
   Iv <- 0
   Iw <- 0
-  V <- 2
-  W <- 2
+  V <- 1
+  W <- 1
   # K <- S/10 # capacidade de suporte ouseja cuantos humanos poderiam matar 
   
   
@@ -110,7 +117,7 @@ HVW.model  <- function(natalidade = natalidade,
   
   # Tempo de simulacao ----
   
-  tsim <- 2500
+  tsim <- 50000
   Dt <- 1
   
   # Funcao para o modelo SIR ----
@@ -169,9 +176,5 @@ HVW.model  <- function(natalidade = natalidade,
   return(plot.vamp.lobi.hum)
   
   
-  
-<<<<<<< HEAD
+
 }
-=======
-}
->>>>>>> df54ee150e833471725060bf614fef0e57b48ee4
