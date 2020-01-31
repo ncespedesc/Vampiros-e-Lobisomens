@@ -7,7 +7,7 @@ modelagem matematica de vampiros e lobisomens
 
 modelo compartimental criado para a disciplina de Modelagem Matematica da USP 
 
-
+![populacoes ao longo do tempo](https://github.com/ncespedesc/Vampiros-e-Lobisomens/blob/master/vampi.png?raw=true)
 
 
 
